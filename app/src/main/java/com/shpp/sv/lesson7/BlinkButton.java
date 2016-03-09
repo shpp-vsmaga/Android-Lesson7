@@ -18,6 +18,7 @@ public class BlinkButton extends Button {
     private static final String LOG_TAG = "svcom";
     private Handler handler = new Handler();
     private static final long REFRESH_INTERVAL = 2000;
+    private static final long STROKE_WIDTH = 20;
 
     public BlinkButton(Context context) {
         super(context);
@@ -64,14 +65,14 @@ public class BlinkButton extends Button {
         /*Draw edging*/
         paint.setColor(Color.rgb(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(20);
+        paint.setStrokeWidth(STROKE_WIDTH);
         paint.setAntiAlias(true);
         canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
 
         /*Draw label*/
         paint.setStyle(Paint.Style.FILL);
         paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTextSize(33);
+        paint.setTextSize(super.getTextSize());
         canvas.drawText(text, canvas.getWidth() / 2, canvas.getHeight() / 2, paint);
     }
 
