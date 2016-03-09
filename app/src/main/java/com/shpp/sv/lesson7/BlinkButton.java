@@ -22,18 +22,32 @@ import java.util.logging.LogRecord;
  */
 public class BlinkButton extends Button {
 
-    private static String LOG_TAG = "svcom";
+    private static final String LOG_TAG = "svcom";
+    private Handler handler = new Handler();
+    private static final long REFRESH_INTERVAL = 2000;
 
     public BlinkButton(Context context) {
         super(context);
-
+        log();
+        createRefreshTask();
     }
 
     public BlinkButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         log();
+        createRefreshTask();
     }
 
+    void createRefreshTask(){
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                invalidate();
+                handler.postDelayed(this, REFRESH_INTERVAL);
+            }
+        }, REFRESH_INTERVAL);
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {

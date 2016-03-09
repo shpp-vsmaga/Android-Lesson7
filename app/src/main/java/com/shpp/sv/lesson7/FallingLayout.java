@@ -70,6 +70,7 @@ public class FallingLayout extends FrameLayout {
             @Override
             public void onAnimationEnd(Animation animation) {
                 setOnLongClickListener(longClickListener);
+
             }
 
             @Override
