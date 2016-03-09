@@ -16,6 +16,11 @@ public class FallingLayout extends FrameLayout {
     private OnClickListener clickListener;
     private OnLongClickListener longClickListener;
     private ArrayList<View> views = new ArrayList<View>();
+    private final static int PIVOT_Y = -600;
+    private final static int ROTATE_DEGREE = 10;
+    private final static long DURATION = 3000;
+    private final static long RETURN_DURATION = 100;
+    private final static int ROTATE_REPEAT_COUNT = 6;
 
 
     public FallingLayout(final Context context) {
@@ -87,19 +92,19 @@ public class FallingLayout extends FrameLayout {
     }
 
     private void animateLikePendulum(View view) {
-        RotateAnimation rotateLeft = new RotateAnimation(0, -10,
-                Animation.RELATIVE_TO_SELF, -600);
-        rotateLeft.setRepeatCount(5);
+        RotateAnimation rotateLeft = new RotateAnimation(0, -ROTATE_DEGREE,
+                Animation.RELATIVE_TO_SELF, PIVOT_Y);
+        rotateLeft.setRepeatCount(ROTATE_REPEAT_COUNT - 1);
 
-        RotateAnimation rotateRight = new RotateAnimation(10, 0,
-                Animation.RELATIVE_TO_SELF, -600);
-        rotateRight.setRepeatCount(6);
+        RotateAnimation rotateRight = new RotateAnimation(ROTATE_DEGREE, 0,
+                Animation.RELATIVE_TO_SELF, PIVOT_Y);
+        rotateRight.setRepeatCount(ROTATE_REPEAT_COUNT);
 
         AnimationSet set = new AnimationSet(true);
         set.setAnimationListener(createAnimationListener());
         set.addAnimation(rotateLeft);
         set.addAnimation(rotateRight);
-        set.setDuration(500);
+        set.setDuration(DURATION / ROTATE_REPEAT_COUNT);
         set.setFillAfter(true);
         set.setRepeatMode(Animation.REVERSE);
 
@@ -119,14 +124,14 @@ public class FallingLayout extends FrameLayout {
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", 0,
                 this.getHeight() - view.getBottom());
 
-        animator.setDuration(3000);
+        animator.setDuration(DURATION);
         animator.start();
     }
 
     private void animateBackHome(View view) {
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY",
                 this.getHeight() - view.getBottom(), 0);
-        animator.setDuration(100);
+        animator.setDuration(RETURN_DURATION);
         animator.start();
     }
 
