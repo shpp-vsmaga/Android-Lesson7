@@ -17,20 +17,22 @@ public class BlinkButton extends Button {
 
     private static final String LOG_TAG = "svcom";
     private Handler handler = new Handler();
+    private Random rnd;
+    private Paint paint;
     private static final long REFRESH_INTERVAL = 2000;
     private static final long STROKE_WIDTH = 20;
 
     public BlinkButton(Context context) {
         super(context);
-        createRefreshTask();
+        init();
     }
 
     public BlinkButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        createRefreshTask();
+        init();
     }
 
-    void createRefreshTask(){
+    void init(){
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -39,6 +41,9 @@ public class BlinkButton extends Button {
                 handler.postDelayed(this, REFRESH_INTERVAL);
             }
         }, REFRESH_INTERVAL);
+
+        rnd = new Random();
+        paint = new Paint();
     }
 
     @Override
@@ -53,9 +58,7 @@ public class BlinkButton extends Button {
     }
 
     private void redrawButton(Canvas canvas) {
-        Random rnd = new Random();
         String text = super.getText().toString();
-        Paint paint = new Paint();
 
         /*Fill canvas with white color*/
         paint.setStyle(Paint.Style.FILL);
