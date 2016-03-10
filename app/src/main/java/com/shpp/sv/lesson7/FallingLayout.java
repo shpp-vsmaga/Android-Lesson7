@@ -3,12 +3,14 @@ package com.shpp.sv.lesson7;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class FallingLayout extends FrameLayout {
@@ -24,6 +26,8 @@ public class FallingLayout extends FrameLayout {
     private final static long DURATION = 3000;
     private final static long RETURN_DURATION = 100;
     private final static int ROTATE_REPEAT_COUNT = 6;
+    private HashMap<Integer, ObjectAnimator> animatorFallMap;
+    private HashMap<Integer, ObjectAnimator> animatorBackHomelMap;
 
 
     public FallingLayout(final Context context) {
@@ -37,6 +41,9 @@ public class FallingLayout extends FrameLayout {
     }
 
     private void init() {
+        animatorFallMap = new HashMap<>();
+        animatorBackHomelMap = new HashMap<>();
+
         /*Init listeners*/
         clickListener = createClickListener();
         longClickListener = createLongClickListener();
@@ -127,18 +134,30 @@ public class FallingLayout extends FrameLayout {
     }
 
     private void animateFall(View view) {
-        ObjectAnimator animatorFall = ObjectAnimator.ofFloat(view, "translationY", 0,
-                this.getHeight() - view.getBottom());
+        int viewHashCode = view.hashCode();
 
-        animatorFall.setDuration(DURATION);
-        animatorFall.start();
+        if(!animatorFallMap.containsKey(viewHashCode)) {
+            ObjectAnimator animatorFall = ObjectAnimator.ofFloat(view, "translationY", 0,
+                    this.getHeight() - view.getBottom());
+
+            animatorFall.setDuration(DURATION);
+            animatorFallMap.put(viewHashCode, animatorFall);
+        }
+
+        animatorFallMap.get(viewHashCode).start();
     }
 
     private void animateBackHome(View view) {
-        ObjectAnimator animatorBackHome = ObjectAnimator.ofFloat(view, "translationY",
-                this.getHeight() - view.getBottom(), 0);
-        animatorBackHome.setDuration(RETURN_DURATION);
-        animatorBackHome.start();
+        int viewHashCode = view.hashCode();
+
+        if (!animatorBackHomelMap.containsKey(viewHashCode)) {
+            ObjectAnimator animatorBackHome = ObjectAnimator.ofFloat(view, "translationY",
+                    this.getHeight() - view.getBottom(), 0);
+            animatorBackHome.setDuration(RETURN_DURATION);
+            animatorBackHomelMap.put(viewHashCode, animatorBackHome);
+        }
+
+        animatorBackHomelMap.get(viewHashCode).start();
     }
 
 }
